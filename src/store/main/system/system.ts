@@ -25,6 +25,7 @@ const systemModule: Module<ISystemState, IRootState> = {
     }
   },
   mutations: {
+    // 修改数据
     changeUsersList(state, userList: any[]) {
       state.usersList = userList
     },
