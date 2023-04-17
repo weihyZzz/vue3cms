@@ -1,7 +1,12 @@
 <template>
   <div class="role">
-    <page-search :searchFormConfig="searchFormConfig"></page-search>
+    <page-search
+      :searchFormConfig="searchFormConfig"
+      @resetBtnClick="handleResetClick"
+      @queryBtnClick="handleQueryClick"
+    ></page-search>
     <page-content
+      ref="pageContentRef"
       :contentTableConfig="contentTableConfig"
       @newBtnClick="handleNewData"
       @editBtnClick="handleEditData"
@@ -44,6 +49,7 @@ import { searchFormConfig } from './config/search.config'
 import { contentTableConfig } from './config/content.config'
 import { modalConfig } from './config/modal.config'
 
+import { usePageSearch } from '@/hooks/use-page-search'
 import { usePageModal } from '@/hooks/use-page-modal'
 
 export default defineComponent({
@@ -54,14 +60,15 @@ export default defineComponent({
     PageModal
   },
   setup() {
+    const [pageContentRef, handleResetClick, handleQueryClick] = usePageSearch()
+
     // 1.处理pageModal的hook
     const elTreeRef = ref<InstanceType<typeof ElTree>>()
     const editCallback = (item: any): void => {
-      const leafKeys = menuMapLeafKeys(item.menuList)
-      console.log(leafKeys)
+      // const leafKeys = menuMapLeafKeys(item.menuList)
       // 获取到所有菜单列表的叶子结点后，进行勾选操作
       nextTick(() => {
-        console.log(elTreeRef.value)
+        const leafKeys = menuMapLeafKeys(item.menuList)
         elTreeRef.value?.setCheckedKeys(leafKeys, false)
       })
     }
@@ -96,7 +103,10 @@ export default defineComponent({
       menu,
       handleCheckChange,
       otherInfo,
-      elTreeRef
+      elTreeRef,
+      pageContentRef,
+      handleResetClick,
+      handleQueryClick
     }
   }
 })

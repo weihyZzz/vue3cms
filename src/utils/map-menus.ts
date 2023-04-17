@@ -154,4 +154,19 @@ export function menuMapLeafKeys(menuList: any[]) {
   return leftKeys
 }
 
+export function getMenuChecks(menuList: any[]): number[] {
+  const checks: number[] = []
+  const _recurseGetChecked = (menuList: any[]) => {
+    for (const menu of menuList) {
+      if (menu.children) {
+        _recurseGetChecked(menu.children)
+      } else {
+        checks.push(menu.id)
+      }
+    }
+  }
+  _recurseGetChecked(menuList)
+  return checks
+}
+
 export { firstMenu }
